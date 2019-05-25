@@ -1,9 +1,8 @@
 const express = require("express");
 const helmet = require("helmet");
-
+const knex = require("knex");
 const server = express();
 
-const knex = require("knex");
 const knexConfig = {
   client: "sqlite3",
   connection: {
@@ -28,6 +27,20 @@ server.get("/api/zoos", (req, res) => {
       res
         .status(400)
         .json({ message: "Something went wrong with retrieving the data." });
+    });
+});
+
+server.post("/api/zoos", (req, res) => {
+  const zoo = req.body;
+  console.log(zoo);
+  db.insert(zoo)
+    .into("zoos")
+    .then(result => {
+      res.status(201).json(result);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
     });
 });
 
