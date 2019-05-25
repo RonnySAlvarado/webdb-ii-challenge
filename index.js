@@ -90,6 +90,33 @@ server.put("/api/zoos/:id", (req, res) => {
     });
 });
 
+server.get("/api/bears", (req, res) => {
+  db("bears")
+    .then(bears => {
+      res.status(200).json(bears);
+    })
+    .catch(err => {
+      console.log(err);
+      res
+        .status(400)
+        .json({ message: "Something went wrong with retrieving the data." });
+    });
+});
+
+server.post("/api/bears", (req, res) => {
+  const bear = req.body;
+  console.log(bear);
+  db.insert(bear)
+    .into("bears")
+    .then(result => {
+      res.status(201).json(result);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
